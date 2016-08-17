@@ -1,0 +1,173 @@
+Setting up an EBS volume on an EC2 instance for use with DBs
+To get started, we'll run an EC2 instance, create an EBS volume, and attach the volume to the instance. You can run the instance in any availability zone, just make sure to create the volume in the same zone so it can be attached to the instance.
+As mentioned in the previous section, we assume that you have installed the EC2 API command line tools on your local system.
+Run an instance of Ubuntu 9.10 Karmic base install specifying your ssh keypair name. Make a note of the instance id (say, i-IIII1111). Check to see if the instance is running (might take a minute) and make a note of the external hostname (say, HOST1111).
+ec2-run-instances -z us-east-1a --key YOURKEYPAIR ami-1515f67c
+
+ec2-describe-instances i-IIII1111
+Create a new 10 GB EBS volume and make a note of the volume id (say, vol-VVVV1111). Check to see if the new volume is available (might take a few seconds).
+ec2-create-volume -z us-east-1a -s 10
+
+ec2-describe-volumes vol-VVVV1111
+Once it's available, attach the EBS volume to the instance as /dev/sdh
+ec2-attach-volume -d /dev/sdh -i i-IIII1111 vol-VVVV1111
+Now we can set things up on the instance itself, so connect to it and install the necessary software on the instance. Enter and record a secure MySQL root password when prompted.
+ssh -i YOURSSHKEYFILE ubuntu@HOST1111
+
+sudo apt-get update && sudo apt-get upgrade -y
+sudo apt-get install -y xfsprogs mysql-server
+Create an XFS file system on the EBS volume and mount it as /vol
+grep -q xfs /proc/filesystems || sudo modprobe xfs
+sudo mkfs.xfs /dev/sdh
+
+echo "/dev/sdh /vol xfs noatime 0 0" | sudo tee -a /etc/fstab
+sudo mkdir -m 000 /vol
+sudo mount /vol
+You now have a 10 GB (or whatever size you specified) EBS volume mounted under /vol with an XFS file system, and it will be automatically mounted if the instance reboots.
+Anything you store under /vol (including MySQL files) will persist beyond the life of the current instance, and you can take snapshots of this volume for backup or replication.
+Configuring MySQL to use the EBS volume
+Now that we have an EBS volume mounted on the instance with a good file system, let's put the MySQL database on that volume and tell MySQL where it is.
+Stop the MySQL server.
+sudo /etc/init.d/mysql stop
+Move the existing database files to the EBS volume. Point MySQL to the correct database files on the EBS volume using mount bind.
+sudo mkdir /vol/etc /vol/lib /vol/log
+sudo mv /etc/mysql     /vol/etc/
+sudo mv /var/lib/mysql /vol/lib/
+sudo mv /var/log/mysql /vol/log/
+
+sudo mkdir /etc/mysql
+sudo mkdir /var/lib/mysql
+sudo mkdir /var/log/mysql
+
+echo "/vol/etc/mysql /etc/mysql     none bind" | sudo tee -a /etc/fstab
+sudo mount /etc/mysql
+
+echo "/vol/lib/mysql /var/lib/mysql none bind" | sudo tee -a /etc/fstab
+sudo mount /var/lib/mysql
+
+echo "/vol/log/mysql /var/log/mysql none bind" | sudo tee -a /etc/fstab
+sudo mount /var/log/mysql
+Restart the MySQL server.
+sudo /etc/init.d/mysql start
+You are now running MySQL with all of the data and binary log files persistently stored on a high performance, redundant EBS volume!
+To prove to yourself that a later snapshot saved your database changes, you might want to load some data or simply create a placeholder database with a SQL statement like:
+mysql -u root -p -e 'CREATE DATABASE tutorial_sample'
+Your data is pretty safe here, but let's make it even safer with snapshot backups.
+Snapshotting the database
+An EBS snapshot is a point in time copy of the complete EBS volume. It will save the current state of all files that were placed on that volume at a block level including the MySQL database data and binary logs. Snapshots are saved to Amazon S3 which is even more secure than EBS in that it is archived in multiple geographic locations.
+Since file systems and databases often have things in memory on their way to disk and active processes can be changing the state of the disk so that it isn't always entirely consistent with itself, we take pains to flush, lock, and freeze the database and the file system for the few moments that it takes to create the EBS snapshot. This may cause a slight pause in activity on that system, but if the process is automated, it tends to be sufficiently short that most folks won't notice.
+To be able to type all the required commands in a single connection to the EC2 instance, this example uses the mysql "SYSTEM" statement to run command line programs, but these commands don't really have to be run from inside MySQL to be effective.
+Start a MySQL session on the instance, using the password you set above.
+mysql -u root -p
+In the mysql session, flush the tables to disk and acquire a lock. Flush the file system to disk and freeze it. Do not exit the MySQL session or you will lose the lock and snapshot potentially inconsistent database files!
+FLUSH TABLES WITH READ LOCK;
+SHOW MASTER STATUS;
+SYSTEM sudo xfs_freeze -f /vol
+Note: The output from SHOW MASTER STATUS can be handy if you later want to start a slave database from the snapshot.
+On your local system (which has the EC2 API command line tools installed) create a snapshot of the EBS volume. Make a note of the snapshot id (say, snap-SSSS1111).
+ec2-create-snapshot vol-VVVV1111
+Back in the same MySQL session on the instance, unfreeze the file system, release the database lock, and you're done!
+SYSTEM sudo xfs_freeze -u /vol
+UNLOCK TABLES; 
+EXIT
+Though the ec2-create-snapshot command returns quickly, the actual snapshot may take a while to complete writing to S3. Have no fear, it will be consistent as of the time the snapshot was initiated above and no further database or disk writes on the instance will affect it.
+You can monitor the progress of the snapshot with this command:
+ec2-describe-snapshots snap-SSSS1111
+Note: If you have a busy database with some long running statements, then acquiring a database lock may be difficult without interfering with operations. However, if all of your tables use the InnoDB engine, then you may skip the LOCK/UNLOCK statements above. MySQL will restore the database to a consistent state when it is run against the binary backup.
+Automated snapshot program
+The above sequence of MySQL statements and shell commands can be a bit of a hassle when performed manually, not to mention that database activity will be blocked while you are typing, so...
+The ec2-consistent-snapshot program automates the appropriate flushing and locking of MySQL and XFS file systems while the EBS snapshot is initiated. To install this on Ubuntu, use the following steps:
+codename=$(lsb_release -cs)
+echo "deb http://ppa.launchpad.net/alestic/ppa/ubuntu $codename main"|
+  sudo tee /etc/apt/sources.list.d/alestic-ppa.list    
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BE09C571
+sudo apt-get update
+sudo apt-get install -y ec2-consistent-snapshot
+sudo PERL_MM_USE_DEFAULT=1 cpan Net::Amazon::EC2
+The documentation can be accessed using:
+man ec2-consistent-snapshot
+This program can be run from a scheduled cron job on the EC2 instance to automate backup snapshots while you sleep.
+Since each snapshot only takes up space based on which blocks have changed since the last snapshot and since there may be additional compression applied, the incremental cost of frequent snapshots can sometimes be small.
+Restoring the snapshotted database
+So you want to check out the snapshot of your MySQL database to see if it really has the right data. Or, you'd like to test some code on an instance which has nearly current production data without risk to the live production database. Or, you want to start a MySQL replication slave. Or, you need to recover from an unfortunate DELETE statement without a WHERE clause...
+We'll start another EC2 instance to run the second database server. It is not necessary to terminate the original instance; both can be running in parallel. The second instance and volume must be together in the same availability zone, though it does not have to be where the first instance/volume reside.
+Run a second instance, making a note of the instance id (say, i-IIII2222). Check to see if the instance is running (might take a minute) and make a note of the external hostname (say, HOST2222).
+ec2-run-instances -z us-east-1b --key YOURKEYPAIR ami-1515f67c
+
+ec2-describe-instances i-IIII2222
+Create a second EBS volume based on the snapshot of the original volume and make a note of the volume id (say,vol-VVVV2222). Check to see if the second volume is available (might take a while).
+ec2-create-volume -z us-east-1b --snapshot snap-SSSS1111
+
+ec2-describe-volumes vol-VVVV2222
+Once it's available, attach the second EBS volume to the second instance as /dev/sdh
+ec2-attach-volume -d /dev/sdh -i i-IIII2222 vol-VVVV2222
+Note: If the original instance had crashed or been terminated, we could skip the creation of a second volume from a snapshot and simply attach the original volume to the second instance. The remainder of these instructions would apply just the same for getting up and running with that original volume, though you might want to run xfs_checkjust before mounting to make sure the file system is in a consistent state after the crash.
+Now, hop on to the second instance, install the required software, and mount the attached EBS volume. (The MySQL password does not matter here because we will be using a pre-existing database.) We also make sure the files are owned by mysql, just in case UIDs are different on the new instance.
+ssh -i YOURSSHKEYFILE ubuntu@HOST2222
+
+sudo apt-get update && sudo apt-get upgrade -y
+export DEBIAN_FRONTEND=noninteractive
+sudo -E apt-get install -y xfsprogs mysql-server
+
+echo "/dev/sdh /vol xfs noatime 0 0" | sudo tee -a /etc/fstab
+sudo mkdir -m 000 /vol
+sudo mount /vol
+
+sudo find /vol/{lib,log}/mysql/ ! -user  root -print0 | 
+  sudo xargs -0 -r chown mysql
+sudo find /vol/{lib,log}/mysql/ ! -group root -a ! -group adm -print0 |
+  sudo xargs -0 -r chgrp mysql
+Point MySQL to the correct database files on the EBS volume.
+sudo /etc/init.d/mysql stop
+
+echo "/vol/etc/mysql /etc/mysql     none bind" | sudo tee -a /etc/fstab
+sudo mount /etc/mysql
+
+echo "/vol/lib/mysql /var/lib/mysql none bind" | sudo tee -a /etc/fstab
+sudo mount /var/lib/mysql
+
+echo "/vol/log/mysql /var/log/mysql none bind" | sudo tee -a /etc/fstab
+sudo mount /var/log/mysql
+
+sudo /etc/init.d/mysql start
+You now have a second machine running against an exact copy of the first database at the time of the snapshot. Imagine the possibilities and smile!
+You can verify this by looking for the "tutorial_sample" database you created earlier.
+mysql -u root -p -e 'SHOW DATABASES'
+Note: Each of these instances has mounted a different volume and is using a different set of database files. Though they would have started out sharing similar values in the database, any changes made in one will not be reflected in the other.
+Cleanup
+If you followed the above steps, you will have created resources which will continue to be charged against your EC2 account until you release them. Here are the steps to shut down and delete everything created in this tutorial. The first commands run on the instances:
+Unmount the EBS volume file systems on each of the EC2 instances.
+sudo /etc/init.d/mysql stop
+sudo umount /etc/mysql /var/lib/mysql /var/log/mysql /vol
+The rest of the commands should be run on your local system (which has the EC2 API command line tools installed):
+Detach EBS volumes from EC2 instances, delete the volumes, delete the snapshots, and shutdown the instances.
+ec2-detach-volume vol-VVVV1111
+ec2-detach-volume vol-VVVV2222
+
+ec2-delete-volume vol-VVVV1111
+ec2-delete-volume vol-VVVV2222
+
+ec2-delete-snapshot snap-SSSS1111
+
+ec2-terminate-instances i-IIII1111
+ec2-terminate-instances i-IIII2222
+Verify that it's all gone.
+ec2-describe-instances
+ec2-describe-volumes
+ec2-describe-snapshots
+Feedback
+Please send feedback, corrections, and recommended enhancements to the author: Eric Hammond <ehammond-ec2@thinksome.com>
+Questions may be posted to the Amazon EC2 Forum so others can pitch in with and benefit from answers.
+I am especially interested in notes about what specific steps you changed to get this guide to work on other Linux distributions. These may be included in an update to this tutorial.
+Thanks for ideas, code, and suggestions: Mark Callaghan, petterim, Rodney Quillo, smarttux, B. True, nrforum, mattjive
+Resources
+		Feature Guide: Elastic Block Store
+		Amazon EC2 Developer Guide (Elastic Block Store)
+		Amazon EC2 Getting Started Guide (running and connecting to instances)
+		XFS file system
+		Ubuntu and Debian AMIs for Amazon EC2
+		MySQL snapshots and replication info
+UPDATES
+The following information has come out since the original publication of this tutorial:
+
+The ext3 and other file systems can also be used to create consistent snapshots with EBS if they are layered on top of LVM or dmsetup. The "dmsetup suspend" and "dmsetup resume" commands take care of the file system freezing.[more info about setting up], [more info about suspending/resuming]
