@@ -1,0 +1,17 @@
+{
+    "AutoScalingGroups": [
+        {
+            ....
+            "Instances": [
+                {
+                    "InstanceId": "i-123abc45d",
+                    "AvailabilityZone": "us-west-2a",
+                    "HealthStatus": "Unhealthy",
+                    "LifecycleState": "Terminating",
+                    "LaunchConfigurationName": "my-lc"
+                },
+                ...
+            ]
+        }
+    ]
+}
