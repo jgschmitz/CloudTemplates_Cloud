@@ -1,0 +1,15 @@
+{
+ "Statement": [
+ {
+ "Action": [
+ "ec2:DescribeInstances",
+ "ec2:CreateRoute",
+ "ec2:ReplaceRoute",
+ "ec2:StartInstances",
+ "ec2:StopInstances"
+ ],
+ "Effect": "Allow",
+ "Resource": "*"
+ }
+ ]
+ }
