@@ -1,0 +1,28 @@
+#!/bin/bash
+# This scripts detaches as secondary interface from an instance.
+# It then attaches the interface to the instance where it has been executed
+# 
+# Command line parameter
+#=======================
+# First parameter: IP address which needs to be detached and moved to a
+# different instance 
+echo "Move IP adress: $1 to system with primary IP address $2" 
+INTERFACE=`ec2-describe-network-interfaces | grep $1 | \
+awk /NETWORKINTERFACE/'{print $2 }'` 
+TONODE=`curl -silent http://169.254.169.254/latest/meta-data/instance-id` 
+echo "move eni: $INTERFACE to instance id: $TONODE " 
+DETACH=`ec2-describe-network-interfaces $INTERFACE | \
+awk /ATTACHMENT/'{print $3 }'` INTERFACESTATUS=`ec2-describe-network-interfaces $INTERFACE | \
+awk -F"\t" /NETWORKINTERFACE/'{print $10 }'`
+echo "$DETACH to be detached. Current interface status is $INTERFACESTATUS"
+ec2-detach-network-interface $DETACH --f
+echo "Command to detach Interface $INTERFACE submitted"
+while [ "$INTERFACESTATUS" = 'in-use' ]
+do
+ echo "Will sleep 1 second"
+ sleep 1
+ INTERFACESTATUS=`ec2-describe-network-interfaces $INTERFACE | \
+ awk -F"\t" /NETWORKINTERFACE/'{print $10 }'`
+Done
+echo "Will attach interface $INTERFACE to $TONODE "
+ec2-attach-network-interface $INTERFACE -i $TONODE -d
