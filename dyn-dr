@@ -1,0 +1,219 @@
+#!/usr/bin/python -u
+
+import boto.ec2.autoscale
+import os
+from boto.ec2.autoscale import ScalingPolicy
+import logging
+import re
+from dynect.DynectDNS import DynectRest
+import sys
+import fileinput
+import smtplib
+from email.MIMEMultipart import MIMEMultipart
+from email.MIMEText import MIMEText
+import ConfigParser
+import json
+import urllib2
+
+__license__ = "GPL"
+__version__ = "1.0.1"
+__status__ = "Production"
+
+# AWS #
+key_id = 'YourKeyHere'
+access_key = 'YourAccessKeyHere'
+ec2_region = 'us-east-1'  # AWS Virginia
+service1_capacity = '10'
+service2_capacity = '6'
+
+# AWS VA  Auto Scale Group1
+asgroup = 'autoscalegroupname1'
+# AWS VA Auto Scale Group2
+apgroup = 'autoscalegroupname2'
+
+# Dyn #
+domain = 'your_dyn_domain_here'
+
+logging.basicConfig(filename='/var/log/Failover.log', level=logging.INFO,
+                    format='%(asctime)s %(message)s',
+                    datefmt='%m/%d/%Y %I:%M:%S %p')
+logging.getLogger("requests").setLevel(logging.WARNING)
+
+
+def connaws():
+    """Authenticate and connect to AWS API"""
+    logging.info("OK: Authenticating with AWS")
+    conn = boto.ec2.autoscale.connect_to_region(ec2_region, aws_access_key_id=key_id, aws_secret_access_key=access_key)
+    return conn
+
+
+def launchinstances(elb, desired_capacity):
+    """
+    This function will launch AWS instances in region us-east-1 (Virginia) at Virginia Auto Scale Groups
+    """
+    logging.info("ALERT: Launching Instances in " + elb)
+    logging.info("ALERT: Total instances in " + elb + " is set to " + desired_capacity)
+    conn = (connaws())
+    try:
+        conn.set_desired_capacity(elb, desired_capacity, honor_cooldown=False)
+    except boto.exception.BotoServerError, e:
+        #logging.info("ERROR: Could not Launch instances")
+        print e
+
+
+def setmininstances(elb, desired_capacity):
+    os.system("aws --region us-east-1 autoscaling update-auto-scaling-group --auto-scaling-group-name " +
+              elb + " --min-size " + desired_capacity)
+
+
+def get_creds():
+    """function to read API credentials from file"""
+    try:
+        #initialize config parser
+        config = ConfigParser.ConfigParser()
+        config.read('/usr/configs/config.cfg')
+        #stash in dict
+        creds = {
+            'customer_name': config.get('login', 'cn'),
+            'user_name': config.get('login', 'un'),
+            'password': config.get('login', 'pw'),
+        }
+        return creds
+    except:
+        raise
+
+
+def shouldirun(acgroup):
+    logging.info("ALERT: Checking if should launch instances in " + acgroup)
+    try:
+        # Case Dyn indicates ERROR, Check if Already Launched instances and skip
+        statuses = ConfigParser.ConfigParser()
+        statuses.read('/root/' + acgroup + '.cfg')
+        vals = {
+            'status': statuses.get('status', acgroup),
+        }
+        if vals['status'] != "Error":
+            logging.info("ALERT: Should launch instances in " + acgroup)
+            cstatus = "launch"
+            return cstatus
+        else:
+            logging.info("ALERT: Already launched instances in " + acgroup + " skipping...")
+
+    except:
+        raise
+
+
+def email(message):
+    """This function send email using SMTP """
+    msg = MIMEMultipart()
+    msg['From'] = 'zabbix@yourdomain.com'
+    msg['To'] = 'devops@yourdomain.com'
+    msg['Subject'] = 'AutoScale Alert'
+    message = message
+    msg.attach(MIMEText(message))
+    mailserver = smtplib.SMTP('yourmail.server.com', 25)
+    mailserver.ehlo()
+    mailserver.sendmail('zabbix@yourdomain.com', 'devops@yourdomain.com', msg.as_string())
+    mailserver.quit
+
+
+def dynconnect():
+    """Connect to Dyn REST API"""
+    # read API credentials from file
+    try:
+        creds = get_creds()
+    except:
+        sys.exit('Unable to open configuration file: config.cfg')
+
+    dyn_iface = DynectRest()
+
+    # Log in
+
+    response = dyn_iface.execute('/Session/', 'POST', creds,)
+    if response['status'] != 'success':
+        print ("Could not authenticate")
+        #print response
+        sys.exit("Unable to Login to DynECT DNS API.  Please check credentials in config.cfg")
+    else:
+        token = ((response)['data']['token'])
+    return token
+
+
+def checkactivefailover(domain):
+    service1 = 0
+    service2 = 0
+    """This function will check all 'Active Failover fqdns' statuses and return true/false"""
+    token = dynconnect()
+    logging.info("OK: Authenticated with Dyn API")
+    req = urllib2.Request('https://api.dynect.net/REST/Failover/' + domain)
+    req.add_header('Auth-Token', token)
+    req.add_header('content-type', 'application/json')
+    req.add_header('detail', 'Y')
+    resp = urllib2.urlopen(req)
+    content = (resp.read())
+    acraw = re.findall(r'/REST/Failover/(.+?)\"', content)
+    for item in acraw:
+        if ' ' in item:
+            pass
+        dsfid = item.strip()
+        reqlabel = urllib2.Request('https://api.dynect.net/REST/Failover/' + dsfid)
+        reqlabel.add_header('Auth-Token', token)
+        reqlabel.add_header('content-type', 'application/json')
+        reqlabel.add_header('detail', 'Y')
+        reqlabels = urllib2.urlopen(reqlabel)
+        labels = (reqlabels.read())
+        json1_data = json.loads(labels)
+        status = json1_data['data']['status']
+        if status != "ok":  # should check if not ok here
+            if "service1" in dsfid:
+                service1 = 1
+            elif "service2" in dsfid or "search" in dsfid:
+
+                service1 = 1
+            else:
+                service2 = 1
+        else:
+            logging.info("OK: Service: " + dsfid + " status is OK")
+
+    return service1, service2
+
+
+def send_email(group):
+    """This function send email using SMTP """
+    logging.info("ALERT: Sending Email Alert for group: " + group)
+    msg = MIMEMultipart()
+    msg['From'] = 'zabbix@yourdomain.com'
+    msg['To'] = 'devops@yourdomain.com'
+    msg['Subject'] = 'Active FailOver status changed to ERROR in service: ' + group
+    message = 'Launching instances in AWS Virginia for service:' + group
+    msg.attach(MIMEText(message))
+    mailserver = smtplib.SMTP('yourmail.server.com', 25)
+    mailserver.ehlo()
+    mailserver.sendmail('zabbix@yourdomain.com', 'devops@yourdomain.com', msg.as_string())
+    mailserver.quit()
+
+
+def updatestatuses(group):
+    for line in fileinput.FileInput("/usr/local/configs/" + group + ".cfg", inplace=1):
+        line = line.replace("OK", "Error")
+        print line
+    logging.info("ALERT: Updating " + group + ".cfg file")
+    send_email(group)
+
+
+def run():
+    (service1, service2) = checkactivefailover(domain=domain)
+    if service1 != 0:
+        service1 = shouldirun(acgroup="service1")
+        if service1 == "launch":
+            launchinstances(elb=asgroup, desired_capacity=search_capacity)
+            setmininstances(elb=asgroup, desired_capacity=search_capacity)
+            updatestatuses(group="service1")
+    if service2 != 0:
+        service2 = shouldirun(acgroup="service2")
+        if service2 == "launch":
+            launchinstances(elb=apgroup, desired_capacity=adplatform_capacity)
+            setmininstances(elb=apgroup, desired_capacity=adplatform_capacity)
+            updatestatuses(group="service2")
+
+run()
