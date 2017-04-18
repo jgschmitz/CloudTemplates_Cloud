@@ -43,7 +43,7 @@ parquetFile.registerTempTable("parquetFile")
 wells_all_all_sql = sqlContext.sql("SELECT * FROM parquetFile")
 
 # Print the result set
-wells_all_all = wells_all_all_sql.map(lambda p: "UWI: {0:15} Ipsum Comment: {1}".format(p.name, p.comment_col))
+wells_all_all = wells_all_all_sql.map(lambda p: "UWI: {0:15} Comment: {1}".format(p.name, p.comment_col))
 
 print("All wells_all and Comments -- `SELECT * FROM parquetFile`")
 print_horizontal()
