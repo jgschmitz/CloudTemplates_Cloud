@@ -4,13 +4,11 @@
 Example of loading .parquet formatted files into a in-memory SQLContext table and running SQL queries against it.
 This script is configured to run a Spark job inside a Jupyter notebook and pull a parquet file from
 our Mapr Cluster
+Jeff Schmitz 4/18/2017
 """
-
 import sys
 
 LINE_LENGTH = 200
-
-
 def print_horizontal():
     """
     Simple method to print horizontal line
@@ -19,8 +17,6 @@ def print_horizontal():
     for i in range(LINE_LENGTH):
         sys.stdout.write('-')
     print("")
-
-
 try:
     from pyspark import SparkContext
     from pyspark import SQLContext
