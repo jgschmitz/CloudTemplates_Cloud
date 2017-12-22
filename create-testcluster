@@ -1,0 +1,4 @@
+aws emr create-cluster --name "Test cluster" --ami-version 3.3 --applications Name=Hue Name=Hive Name=Pig \
+--use-default-roles --ec2-attributes KeyName=myKey \
+--instance-type m3.xlarge --instance-count 3 \
+--bootstrap-action Path=s3://elasticmapreduce/bootstrap-actions/run-if,Name="Run-if Bootstrap",Args=["instance.isMaster=true", "echo 'Running on master node'"]
