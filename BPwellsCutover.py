@@ -1,5 +1,4 @@
-#!/usr/bin/env python
- 
+
 """This scheduler starts/stops EC2 instances using a JSON based schedule.
  
 Usage:
