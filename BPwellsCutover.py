@@ -1,5 +1,5 @@
 
-"""This scheduler starts/stops EC2 instances using a JSON based schedule.""""
+"""This scheduler starts/stops EC2 instances using a JSON based schedule.
  
 Usage:
   aws-scheduler check [<instance_id> ...] [options]
