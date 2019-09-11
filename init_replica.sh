@@ -1,4 +1,5 @@
 #!/bin/bash
+#boom
 
 #################################################################
 # Update the OS, install packages, initialize environment vars,
