@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#call python3
 
 #Blobstorage creation in Azure
 #For use in conjuction with Azure DevLab - you can also use AZ CLI
