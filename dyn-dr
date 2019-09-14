@@ -1,4 +1,4 @@
-#!/usr/bin/python -u
+#!/usr/bin/python3
 
 import boto.ec2.autoscale
 import os
