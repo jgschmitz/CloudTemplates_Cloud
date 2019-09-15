@@ -3,8 +3,8 @@
 """
 Example of loading .parquet formatted files into a in-memory SQLContext table and running SQL queries against it.
 This script is configured to run a Spark job inside a Jupyter notebook and pull a parquet file from
-our Mapr Cluster
-Jeff Schmitz 4/18/2017
+our Mapr Cluster - MaR is now dead
+
 """
 import sys
 
