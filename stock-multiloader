@@ -1,5 +1,5 @@
 #The SDK has a special MultipartUploader object to make the multipart upload process as easy as possible.
-#its pretty easy but not as easy as possible
+#aws
 
 use Aws\S3\MultipartUploader;
 use Aws\Exception\MultipartUploadException;
