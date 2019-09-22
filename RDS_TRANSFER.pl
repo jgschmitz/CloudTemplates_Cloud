@@ -1,6 +1,4 @@
-######Perl script used to transfer files TO the RDS instance:
-
-#path to perl executable goes here usually something like #!/usr/bin/perl
+#!/usr/bin/perl
 
 use DBI;
 use warnings;
