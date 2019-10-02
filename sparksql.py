@@ -1,4 +1,5 @@
 %pyspark
+# install the pyspark driver pip3.7 install pyspark
 
 """
 Example of loading .parquet formatted files into a in-memory SQLContext table and running SQL queries against it.
