@@ -3,6 +3,7 @@
 use DBI;
 use warnings;
 use strict;
+use buggers;
 
 # RDS instance info
 my $RDS_PORT=1521;
