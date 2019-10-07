@@ -16,7 +16,7 @@ my $RDS_SID="<rds_db_name>";
 my $dirname = "DATA_PUMP_DIR";
 my $fname = $ARGV[0];
 
-my $data = "dummy";
+my $data = "records_list";
 my $chunk = 8192;
 
 my $sql_open = "BEGIN perl_global.fh := utl_file.fopen(:dirname, :fnam
