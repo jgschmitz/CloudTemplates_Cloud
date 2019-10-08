@@ -1,4 +1,5 @@
-## Running Spark 2.0.0+ in Standalone mode
+## Running Spark 2.4.4+ in Standalone mode
+## 
 
 ## For Mac Users 
  
