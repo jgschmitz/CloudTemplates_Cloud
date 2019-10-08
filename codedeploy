@@ -95,7 +95,7 @@
           "Fn::Equals": [
             "2",
             {
-              "Ref": "InstanceCount"
+              "Ref": "Instances"
             }
           ]
         },
