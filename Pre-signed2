@@ -1,4 +1,4 @@
-#To create an instance of PostObjectV4, you must provide an instance of Aws\S3\S3Client, a bucket, an associative array of form input fields, an array of policy conditions referred in POST policy document and expiration time string for the policy(optional, 1 hour by default):
+#To create an instance of PostObjectV4, you provide an instance of Aws\S3\S3Client, a bucket, an associative array of form input fields, an array of policy conditions referred in POST policy document and expiration time string for the policy(optional, 1 hour by default):
 #triple AAA array
 $client = new \Aws\S3\S3Client([
     'version' => 'latest',
