@@ -30,7 +30,5 @@ $postObject = new \Aws\S3\PostObjectV4(
 // Get attributes to set on an HTML form, e.g., action, method, enctype
 $formAttributes = $postObject->getFormAttributes();
 
-// Get form input fields. This will include anything set as a form input in
-// the constructor, the provided JSON policy, your AWS Access Key ID, and an
-// auth signature.
+
 $formInputs = $postObject->getFormInputs();
