@@ -4,7 +4,7 @@
             ....
             "Instances": [
                 {
-                    "InstanceId": "i-123abc45d",
+                    "InstanceId": "i-123abc45m",
                     "AvailabilityZone": "us-west-2a",
                     "HealthStatus": "Unhealthy",
                     "LifecycleState": "Terminating",
