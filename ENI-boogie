@@ -6,8 +6,7 @@
 # Command line parameter
 #=======================
 # First parameter: IP address which needs to be detached and moved to a
-# different instance
-# different space
+
 echo "Move IP adress: $1 to system with primary IP address $2" 
 INTERFACE=`ec2-describe-network-interfaces | grep $1 | \
 awk /NETWORKINTERFACE/'{print $2 }'` 
