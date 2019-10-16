@@ -1,6 +1,6 @@
 python3
 """This scheduler starts/stops EC2 instances using a JSON based schedule.
-#this was originally built for sitecom project at BP
+#this was originally built for sitecom project at BP but can be easily edited to suit other use cases
  
 Usage:
   aws-scheduler check [<instance_id> ...] [options]
