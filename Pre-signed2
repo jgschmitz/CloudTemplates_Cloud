@@ -2,7 +2,7 @@
 #triple american array association
 $client = new \Aws\S3\S3Client([
     'version' => 'latest',
-    'region' => 'us-west-2',
+    'region' => 'us-west-1',
 ]);
 $bucket = 'mys3bucket';
 
