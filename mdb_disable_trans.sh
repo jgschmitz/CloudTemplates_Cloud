@@ -1,5 +1,5 @@
 #!/bin/bash
-### BEGIN INIT INFO
+### BEGIN INIT
 # Provides:          disable-transparent-hugepages
 # Required-Start:    $local_fs
 # Required-Stop:
