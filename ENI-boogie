@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This scripts detaches as secondary interface from an instance to instance
+# This script detaches as secondary interface from an instance to instance
 # It then attaches the interface to the instance where it has been executed
 # 
 # Command line parameter
