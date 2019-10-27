@@ -1,5 +1,5 @@
 python3
-"""This scheduler starts and stops EC2 instances using a JSON based schedule.
+"""This scheduler starts and stops EC2 instances using a JSON defined schedule.
 #this was originally built for sitecom project at BP but can be easily edited to suit other use cases
  
 Usage:
