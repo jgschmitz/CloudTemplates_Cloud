@@ -1,4 +1,4 @@
-#Setting up an EBS volume on an EC2 instance for use with Mongo
+#Setting up an EBS volume on an EC2 instance for use Mongo
 To get started, we'll run an EC2 instance, create an EBS volume, and attach the volume to the instance. You can run the instance in any availability zone, just make sure to create the volume in the same zone so it can be attached to the instance.
 As mentioned in the previous section, we assume that you have installed the EC2 API command line tools on your local system.
 
