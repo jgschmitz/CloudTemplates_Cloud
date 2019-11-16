@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# instance to instance secorndary interface
 # This script detaches as secondary interface from an instance to instance
 # It then attaches the interface to the instance where it has been executed
 # 
