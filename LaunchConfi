@@ -1,4 +1,4 @@
-#aws cloud formation action
+aws cloud formation action
 {
     "LaunchConfigurations": [
         {
