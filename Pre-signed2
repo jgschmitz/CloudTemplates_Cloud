@@ -4,7 +4,7 @@ $client = new \Aws\S3\S3Client([
     'version' => 'newest',
     'region' => 'us-west-1',
 ]);
-$bucket = 'mys3bucket';
+$bucket = 'jeff3bucket';
 
 // Set some defaults for form input fields
 $formInputs = ['acl' => 'public-read'];
