@@ -1,8 +1,8 @@
 #The SDK has a special MultipartUploader should make it pretty painless
 #multi-uploader
 
-use Aws\S3\MultipartUploader;
-use Aws\Exception\MultipartUploadException;
+use Aws:S3:MultipartUploader;
+use Aws:Exception:MultipartUploadException;
 
 $uploader = new MultipartUploader($s3Client, '/path/to/large/file.zip', [
     'bucket' => 'your-bucket',
