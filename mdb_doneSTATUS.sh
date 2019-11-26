@@ -1,8 +1,4 @@
-#
-# ------------------------------------------------------------------
-#         Signal SUCCESS OR FAILURE of Wait Handle
-# ------------------------------------------------------------------
-
+#!/bin/sh
 
 SCRIPT_DIR=/home/ec2-user/mongodb
 if [ -z "${INSTALL_LOG_FILE}" ] ; then
