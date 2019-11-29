@@ -10,7 +10,7 @@ You will be billed for the AWS resources used if you create a stack from this te
             "Tags": [],
             "Outputs": [
                 {
-                    "Description": "Name of S3 bucket to hold website content",
+                    "Description": "cygnet23454",
                     "OutputKey": "BucketName",
                     "OutputValue": "myteststack-s3bucket-jssofi1zie2w"
                 }
