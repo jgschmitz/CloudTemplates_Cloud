@@ -1,4 +1,4 @@
-#AWS S3 multi-region clients maintain an internal cache of the regions in which given buckets reside. By default, each client has its own in-memory cache. To share a cache between clients or processes, supply an instance of Aws\CacheInterface as the bucket_region_cache option to your multi-region client.
+#AWS S3 multi-region clients maintain a cache of the regions in which given buckets reside. By default, each client has its own in-memory cache. To share a cache between clients or processes, supply an instance of Aws\CacheInterface as the bucket_region_cache option to your multi-region client.
 
 use Aws\DoctrineCacheAdapter;
 use Aws\Sdk;
