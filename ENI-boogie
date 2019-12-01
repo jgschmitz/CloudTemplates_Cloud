@@ -1,9 +1,9 @@
 #!/bin/bash
-# instance 2 instance secorndary interface
+# instance secorndary interface
 # This script detaches as secondary interface from an instance to instance
 # It then attaches the interface to the instance where it has been executed
 # 
-# Command line parameter
+# CLI parameter
 #=======================
 # First parameter: IP address which needs to be detached
 
