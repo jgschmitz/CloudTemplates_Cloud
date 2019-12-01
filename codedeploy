@@ -3,7 +3,7 @@
   "AWSTemplateFormatVersion": "2016-08-22”,
   "Parameters": {
     "TagKey": {
-      "Description": "The EC2 tag key that identifies this as a target for deployments.",
+      "Description": "EC2 tag key that identifies this as a target for deployments.",
       "Type": "String",
 	  "Default": "Name",
       "AllowedPattern": "[\\x20-\\x7E]*",
