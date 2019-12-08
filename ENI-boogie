@@ -1,5 +1,5 @@
 #!/bin/bash
-# instance secorndary interface
+# instance secorndary AWS interface
 # This script detaches as secondary interface from an instance to instance
 # It then attaches the interface to the instance where it has been executed
 # 
