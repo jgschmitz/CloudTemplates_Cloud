@@ -4,7 +4,7 @@ use DBI;
 use warnings;
 use strict;
 use buggers;
-use trailers;
+use mist;
 
 # RDS instance info
 my $RDS_PORT=1521;
