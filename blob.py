@@ -2,7 +2,7 @@ python3
 #This is deprecated use the Azure CLI 
 #Blobstorage creation in Azure
 #For use in conjuction with Azure DevLab - you can also use AZ CLI
-#Jeff Schmitz 2017
+#Jeff Schmitz 2019
 
 from azure.storage.blob import BlobService
 from os import listdir
