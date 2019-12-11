@@ -18,7 +18,7 @@ from docopt import docopt
 from ConfigParser import SafeConfigParser
 import boto.ec2
 import boto.ec2.elb
-import sys,os,json,logging, datetime, time
+import sys,os,json,logging, datetime, time,
  
 config = SafeConfigParser()
  
