@@ -1,4 +1,4 @@
-#shows sum information for a stack
+#shows the total sum information for a stack
 
 PROMPT> aws cloudformation describe-stacks --stack-name myteststack
 {
