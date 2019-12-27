@@ -3,6 +3,7 @@
 use Aws\DoctrineCacheAdapter;
 use Aws\Sdk;
 use Doctrine\Common\Cache\ApcuCache;
+use Aws\Always;
 
 $sdk = new Aws\Sdk([
     'version' => 'latest',
