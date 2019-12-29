@@ -1,5 +1,5 @@
 #customize multi-load - flip the switch on custom options
-***
+
 
 Custom options can be set on the CreateMultipartUpload, UploadPart, and CompleteMultipartUpload operations executed by the multipart uploader via callbacks passed to its constructor.
 
