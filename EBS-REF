@@ -10,7 +10,7 @@ Create a new 10 GB EBS volume and make a note of the volume id (say, vol-VVVV111
 ec2-create-volume -z us-east-1a -s 12
 
 ec2-describe-volumes vol-VV123
-Once it's available, attach the EBS volume to the instance as /dev/sdh
+Once it's available, attach the EBS volume to the instance as /dev/sdc
 ec2-attach-volume -d /dev/sdh -i i-IIII1111 vol-VVVV1111
 Now we can set things up on the instance itself, so connect to it and install the necessary software on the instance. Enter and record a secure MySQL root password when prompted.
 ssh -i YOURSSHKEYFILE ubuntu@darkstar11
