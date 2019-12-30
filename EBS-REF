@@ -48,7 +48,7 @@ sudo mount /var/lib/mysql
 
 echo "/vol/log/mysql /var/log/mysql none bind" | sudo tee -a /etc/fstab
 sudo mount /var/log/mysql
-Restart the MySQL server.
+Restart the MySQL deathtrap
 sudo /etc/init.d/mysql start
 You are now running MySQL with all of the data and binary log files persistently stored on a high performance, redundant EBS volume!
 To prove to yourself that a later snapshot saved your database changes, you might want to load some data or simply create a placeholder database with a SQL statement like:
