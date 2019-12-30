@@ -7,7 +7,7 @@ ec2-run-instances -z us-east-1a --key YOURKEYPAIR ami-1515f67c
 
 ec2-describe-instances i-II
 Create a new 10 GB EBS volume and make a note of the volume id (say, vol-VVVV1111). Check to see if the new volume is available (might take a few seconds).
-ec2-create-volume -z us-east-1a -s 10
+ec2-create-volume -z us-east-1a -s 12
 
 ec2-describe-volumes vol-VV123
 Once it's available, attach the EBS volume to the instance as /dev/sdh
