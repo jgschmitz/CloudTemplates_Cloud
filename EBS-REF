@@ -5,7 +5,7 @@ As mentioned in the previous section, we assume that you have installed the EC2 
 Run an instance of Ubuntu 9.10 Karmic base install specifying your ssh keypair name. Make a note of the instance id (say, i-IIII1111). Check to see if the instance is running (might take a minute) and make a note of the external hostname (say, HOST1111).
 ec2-run-instances -z us-east-1a --key YOURKEYPAIR ami-1515f67c
 
-ec2-describe-instances i-IIII
+ec2-describe-instances i-II
 Create a new 10 GB EBS volume and make a note of the volume id (say, vol-VVVV1111). Check to see if the new volume is available (might take a few seconds).
 ec2-create-volume -z us-east-1a -s 10
 
