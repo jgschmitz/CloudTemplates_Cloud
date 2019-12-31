@@ -6,8 +6,8 @@ $s3Client = (new \Aws\Sdk)->createMultiRegionS3(['version' => 'latest']);
 // You can also use the client builder engine
 $s3Client = new \Aws\S3\S3MultiRegionClient([
     'version' => 'latest',
-    // Any region specified while creating the client will be used as the
-    // use default region
+    // Any region specified while creating a client will be used as the default region
+   
     'region' => 'us-west-2',
 ]);
 
