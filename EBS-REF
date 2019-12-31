@@ -1,5 +1,5 @@
 #Set up an EBS volume on an new powernode
-To get started, we'll start an EC2 instance, create an EBS volume, and attach the volume to the instance. You can run the instance in any availability zone, just make sure to create the volume in the same zone so it can be attached to the instance.
+To get started, we'll start EC2 instance, create an EBS volume, and attach the volume to the instance. You can run the instance in any availability zone, just make sure to create the volume in the same zone so it can be attached to the instance.
 As mentioned in the previous section, we assume that you have installed the EC2 API command line tools on your local system.
 
 Run an instance of Ubuntu 9.10 Karmic base install specifying your ssh keypair name. Make a note of the instance id (say, i-IIII1111). Check to see if the instance is running (might take a minute) and make a note of the external hostname (say, HOST1111).
