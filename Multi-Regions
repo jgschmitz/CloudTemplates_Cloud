@@ -1,4 +1,4 @@
-aws cloud formation leveraging S3 assuming multi regions
+aws cloud formation leveraging S3 assuming multiple regions
 
 // Create a multi-region S3 client
 $s3Client = (new \Aws\Sdk)->createMultiRegionS3(['version' => 'latest']);
