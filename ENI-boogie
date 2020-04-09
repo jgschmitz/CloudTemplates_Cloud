@@ -1,7 +1,7 @@
 #!/bin/bash
 # instance secorndary AWS connection
 # This script detaches as secondary interface
-# It then attaches the interface to the instance where it has been executed
+# It then attaches the interface to the instance where it has been 
 # 
 # CLI parameter
 #=======================
