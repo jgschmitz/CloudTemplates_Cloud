@@ -4,7 +4,7 @@
 # It then attaches the interface to
 # 
 # CLI parameter
-#================
+#============
 
 
 echo "Move IP adress: $1 to system with primary IP address $2" 
