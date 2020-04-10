@@ -3,8 +3,7 @@
 # This script detaches as secondary interface
 # It then attaches the interface to
 # 
-# CLI parameter
-#===
+# CLI 
 
 
 echo "Move IP adress: $1 to system with primary IP address $2" 
