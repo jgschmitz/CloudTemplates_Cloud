@@ -5,7 +5,7 @@
 # 
 # CLI parameter
 #=======================
-# First parameter: IP address which needs to be
+# First parameter: IP address which needs
 
 echo "Move IP adress: $1 to system with primary IP address $2" 
 INTERFACE=`ec2-describe-network-interfaces | grep $1 | \
