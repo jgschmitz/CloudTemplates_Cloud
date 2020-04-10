@@ -1,9 +1,8 @@
 #!/bin/bash
 # instance secorndary AWS connection
 # This script detaches as secondary interface
-# It then attaches the interface to
+# It then attaches the interface
 # 
-# CLI 
 
 
 echo "Move IP adress: $1 to system with primary IP address $2" 
