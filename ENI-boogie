@@ -2,7 +2,7 @@
 # instance secorndary AWS connection
 # This script detaches as secondary
 # It then attaches the
-# 
+
 
 
 echo "Move IP adress: $1 to system with primary IP address $2" 
