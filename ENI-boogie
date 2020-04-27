@@ -1,6 +1,6 @@
 #!/bin/bash
 # instance secorndary AWS connection
-echo "Move IP adress: $1 to 
+echo "Move IP adress: 
 INTERFACE=`ec2-describe-network-interfaces | grep $
 awk /NETWORKINTERFACE/'{print $2 }'` 
 TONODE=`curl -silent http://169.254.169.254/latest/meta-data/instance-id` 
