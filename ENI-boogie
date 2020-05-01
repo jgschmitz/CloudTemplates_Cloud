@@ -1,6 +1,6 @@
 #!/bin/bash
 # instance secorndary AWS connection
-pri
+p
 echo "Move IP adress: 
 INTERFACE=`ec2-describe-network-interface
 awk /NETWORKINTERFACE/'{print $2 }'` 
