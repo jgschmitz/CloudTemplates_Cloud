@@ -1,6 +1,6 @@
 #!/bin/bash
 # instance secorndary AWS connection
-echo
+
 INTERFACE=`ec2-describe-network-interface
 awk /NETWORKINTERFACE/'{print $2 }'` 
 TONODE=`curl -silent http://169.254.169.254/latest/meta-data/instance-id` 
