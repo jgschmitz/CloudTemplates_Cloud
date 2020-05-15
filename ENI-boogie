@@ -1,7 +1,7 @@
 #!/bin/bash
 # instance secorndary AWS connection
 
-TONODE=`curl -silent http://169.254.169.254/latest/meta-data/instance-id` 
+TONODE=`curl -silent http://169.254.169.254/latest/meta-data/
 echo "move eni: $INTERFACE to instance id: $TONODE " 
 DETACH=`ec2-describe-network-interfaces $INTERFACE | \
 awk /ATTACHMENT/'{print $3 }'` INTERFACESTATUS=`ec2-describe-network-interfaces $INTERFACE | \
