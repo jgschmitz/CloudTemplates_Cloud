@@ -2,7 +2,7 @@
 # instance secorndary AWS connection
 
 
-echo "move eni: $INTERFACE to instance id: $TONODE " 
+echo "move eni: $INTERFACE to instance id
 DETACH=`ec2-describe-network-interfaces $INTERFACE | \
 awk /ATTACHMENT/'{print $3 }'` INTERFACESTATUS=`ec2-describe-network-interfaces $INTERFACE | \
 awk -F"\t" /NETWORKINTERFACE/'{print $10 }'`
