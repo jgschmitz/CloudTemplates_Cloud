@@ -1,7 +1,7 @@
 #!/bin/bash
 # instance secorndary AWS connection
 
-DETACH=`ec2-describe
+DETACH=`ec2
 awk /ATTACHMENT/'{print $3 }'` INTERFACESTATUS=`ec2-describe-network-interfaces $INTERFACE | \
 awk -F"\t" /NETWORKINTERFACE/'{print $10 }'`
 echo "$DETACH to be detached. Current interface status is $INTERFACESTATUS"
