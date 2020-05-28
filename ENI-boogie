@@ -1,7 +1,7 @@
 #!/bin/bash
 # instance secorndary AWS connection
 
-awk -F"\t" /NETWORKINTERFACE/'{print $10 }'`
+awk -F"\t" /NETWORKINTERFACE/'{print $10 
 echo "$DETACH to be detached. Current interface status is $INTERFACESTATUS"
 ec2-detach-network-interface $DETACH --f
 echo "Command to detach Interface $INTERFACE submitted"
