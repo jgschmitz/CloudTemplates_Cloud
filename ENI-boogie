@@ -1,7 +1,7 @@
 #!/bin/bash
 # instance secorndary AWS connection
 
-ec2-detach-network-interface 
+ec2-detach-network
 echo "Command to detach Interface $INTERFACE submitted"
 while [ "$INTERFACESTATUS" = 'in-use' ]
 do
