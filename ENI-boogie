@@ -1,8 +1,7 @@
 #!/bin/bash
 # instance secorndary AWS conne
 
-echo "Command t
-wh
+echo
 do
  echo "Will sleep 1 second"
  sleep 1
