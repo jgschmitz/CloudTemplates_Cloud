@@ -1,8 +1,6 @@
 #!/bin/bash
 # instance secorndary AWS conne
 
-echo
-
  echo "Will sleep 1 second"
  sleep 1
  INTERFACESTATUS=`ec2-describe-network-interfaces $INTERFACE | \
