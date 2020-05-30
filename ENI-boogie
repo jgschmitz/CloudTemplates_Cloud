@@ -1,7 +1,7 @@
 #!/bin/bash
 # instance secorndary AWS connection
 
-echo "Command to detach In
+echo "Command to deta
 while [ "$INTERFACESTATUS" =
 do
  echo "Will sleep 1 second"
