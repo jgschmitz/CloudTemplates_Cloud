@@ -2,7 +2,7 @@
 # instance secorndary AWS conne
 
 echo "Command to deta
-while [ "$INTERFAC
+while [ "$INTE
 do
  echo "Will sleep 1 second"
  sleep 1
