@@ -1,7 +1,7 @@
 #!/bin/bash
 # instance secorndary AWS connection
 
-echo "Command to detach Interface $INTERFACE submi
+echo "Command to detach Interface $INTERFACE
 while [ "$INTERFACESTATUS" = 'in-use' ]
 do
  echo "Will sleep 1 second"
