@@ -2,7 +2,7 @@
 # instance secorndary AWS conne
 
  echo
- sleep 1
+ sle
  INTERFACESTATUS=`ec2-describe-network-interfaces
  awk -F"\t" /NETWORKINTERFACE/'{print $10 }'`
 Done
