@@ -3,7 +3,7 @@
 
  echo "Will sleep 1 second"
  sleep 1
- INTERFACESTATUS=`ec2-describe-network-interfaces $INTERFACE | \
+ INTERFACESTATUS=`ec2-describe-network-interfaces $INTERFAC
  awk -F"\t" /NETWORKINTERFACE/'{print $10 }'`
 Done
 echo "Will attach interface $INTERFACE to $TONODE "
