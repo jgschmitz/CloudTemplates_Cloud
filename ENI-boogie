@@ -1,7 +1,7 @@
 #!/bin/bash
 # instance secorndary AWS conne
 
- echo "Will sleep 1
+ echo "Will
  sleep 1
  INTERFACESTATUS=`ec2-describe-network-interfaces
  awk -F"\t" /NETWORKINTERFACE/'{print $10 }'`
