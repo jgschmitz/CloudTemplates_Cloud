@@ -2,7 +2,7 @@ aws cloud
 {
     
      {
-            "UserDat
+           
             "EbsOptimized": false,
             "LaunchConfigurationARN": "arm",
             "InstanceMonitoring": {
