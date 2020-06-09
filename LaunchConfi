@@ -1,6 +1,6 @@
 aws cloud
 {
-    "Launch
+    
         {
             "UserData": null,
             "EbsOptimized": false,
