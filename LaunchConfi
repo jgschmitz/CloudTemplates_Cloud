@@ -1,4 +1,4 @@
-aws cloud formation actio
+aws cloud formation
 {
     "LaunchConfigurations": [
         {
