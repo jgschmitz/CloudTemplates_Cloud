@@ -1,5 +1,5 @@
 Create an EBS volume, and attach the volume to theYou can run the instance in any availability zone, just make sure to create the volume in the same zone so it can be attached to the instance.
-As mentioned in the previous section, we assume that you
+As mentioned in the previous section, we assume
 
 Run an instance of  install specifying your ssh keypair name. Make a note of the instance id (say, i-IIII1111). Check to see if the instance is running (might take a minute) and make a note of the external hostname (say, HOST1111).
 ec2-run-instances -z us-east-1a --key YOURKEYPAIR ami-1515f67c
