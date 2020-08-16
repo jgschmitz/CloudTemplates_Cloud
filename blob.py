@@ -3,7 +3,6 @@ python3
 #Blobstorage creation in Azure
 #For use in conjuction with Azure DevLab - you can also use AZ CLI
 #Jeff Schmitz 2019
-print 
 
 from azure.storage.blob import BlobService
 from os import listdir
