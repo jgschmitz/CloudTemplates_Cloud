@@ -3,7 +3,7 @@ python3
 #Blobstorage creation in Azure
 #For use in conjuction with Azure DevLab - you can also use AZ CLI
 #Jeff Schmitz 2019
-print 1,2,3,4,5
+print 1,2,3,4
 from azure.storage.blob import BlobService
 from os import listdir
 from os.path import isfile, join
