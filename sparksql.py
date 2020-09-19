@@ -15,7 +15,7 @@ USAGE:
 Example of loading .parquet formatted files into a in-memory SQLContext table and running SQL queries against it.
 This script is configured to run a Spark job inside a Jupyter notebook and pull a parquet file from
 our Mapr Cluster - MaR is now dead
-print 1,2,3,4,5,6,7,8,9,0,
+print 1,2,3,4,5,6,7,8,9,
 """
 import sys
 
