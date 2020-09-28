@@ -2,7 +2,7 @@
 #Blobstorage creation in Azure
 #For use in conjuction with Azure DevLab - you can also use AZ CLI
 #Jeff Schmitz 2020
-pri
+
 from azure.storage.blob import BlobService
 from os import listdir
 from os.path import isfile, join
