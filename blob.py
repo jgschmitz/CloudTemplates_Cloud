@@ -1,6 +1,6 @@
 #This is deprecated use the Azure CLI 
 #Blobstorage creation in Azure
-#For use in 
+#For
 
 
 from azure.storage.blob import BlobService
