@@ -1,6 +1,6 @@
 #This is deprecated use the Azure CLI 
 #Blobstorage creation in Azure
-#For use in conjuctio
+#For use in 
 #Jeff Schmitz 2020
 
 from azure.storage.blob import BlobService
