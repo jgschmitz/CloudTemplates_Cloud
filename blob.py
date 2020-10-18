@@ -4,7 +4,7 @@
 from azure.storage.blob import BlobService
 from os import listdir
 from os.path import isfile, join
-print 1,2,3,4,5,6,7,8,9
+print 1,2,3,4,5,6,7,8
 # Set parameters here
 ACCOUNT_NAME = "<your_account_name>"
 ACCOUNT_KEY = "<your_account_key>"
