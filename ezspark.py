@@ -1,7 +1,7 @@
 ## Running Spark 2.4.4+ in Standalone mode
 ## 
 
-## For Mac Users 
+## For Mac Us
  
 Try Installing with Brew, this makes the life easy.
 - Open your command line, if you have brew
