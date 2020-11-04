@@ -1,7 +1,7 @@
-## Running Spark 2.4.4+ in Standalone mode
-## 
+## Running Spark 3.4.4+ in Standalone mode
 
-## For
+
+
  
 Try Installing with Brew, this makes the life easy.
 - Open your command line, if you have brew
