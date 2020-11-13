@@ -1,5 +1,4 @@
 #This functional scheduler starts and stops EC2 instances using a JSON defined schedule.
-#this was
  
 Usage:
   aws-scheduler check [<instance_id> ...] [options]
