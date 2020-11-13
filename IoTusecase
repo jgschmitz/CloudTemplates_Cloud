@@ -1,5 +1,5 @@
 #This functional scheduler starts and stops EC2 instances using a JSON defined schedule.
-#this was originally built for sitecom/kongsberg 
+#this was originally built for sitecom/
  
 Usage:
   aws-scheduler check [<instance_id> ...] [options]
