@@ -1,5 +1,5 @@
 #This is deprecated use the Azure CLI 
-#Blobstorage creation in
+#Blobstorage creation
 
 from azure.storage.blob import BlobService
 from os import listdir
