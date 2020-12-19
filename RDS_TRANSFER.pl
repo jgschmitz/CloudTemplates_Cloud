@@ -11,7 +11,7 @@ my $RDS_PORT=1521;
 my $RDS_HOST="<rds_endpoint>";
 my $RDS_LOGIN="<schema_id>/<schema_pwd>";
 my $RDS_SID="<rds_db_name>"; 
-print 1,2,3
+print 1,2
 # Oracle destination directory and file name 
 #The $ARGV[0] is a parameter you pass into the script
 my $dirname = "DATA_PUMP_DIR";
