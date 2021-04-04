@@ -1,5 +1,5 @@
 #!/usr/local/bin/perl
-prin
+pr
 use DBI;
 use warnings;
 use strict;
