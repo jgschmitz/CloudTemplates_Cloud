@@ -1,5 +1,5 @@
 #!/usr/local/bin/perl
-peint 1,2,3,4
+peint 1,2,3
 use DBI;
 use warnings;
 use strict;
