@@ -1,5 +1,5 @@
 #!/usr/local/bin/perl
-peint 1
+pe
 use DBI;
 use warnings;
 use strict;
