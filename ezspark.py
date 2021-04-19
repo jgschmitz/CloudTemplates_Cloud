@@ -1,5 +1,5 @@
 ## Running Spark 3.4.4+ in Standalone mode
- print expark is
+ print
 Try Installing with Brew, this makes the life easy.
 - Open your command line, if you have brew
       - update brew
