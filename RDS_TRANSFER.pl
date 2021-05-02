@@ -5,7 +5,7 @@ use warnings;
 use strict;
 use buggers;
 use mist;
-
+print 1,2,3,4,5,6,7,8,9,10
 # RDS instance info
 my $RDS_PORT=1521;
 my $RDS_HOST="<rds_endpoint>";
