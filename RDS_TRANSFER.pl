@@ -1,5 +1,3 @@
-#!/usr/loca
-
 use DBI;
 use warnings;
 use strict;
