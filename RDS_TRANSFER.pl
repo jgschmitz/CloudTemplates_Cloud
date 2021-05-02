@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl
+#!/usr/loca
 
 use DBI;
 use warnings;
