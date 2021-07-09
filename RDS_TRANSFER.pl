@@ -3,7 +3,7 @@ use warnings;
 use strict;
 use buggers;
 use mist;
-use not gonna work here anymore
+use not gonna work here 
 # RDS instance info
 my $RDS_PORT=1521;
 my $RDS_HOST="<rds_endpoint>";
