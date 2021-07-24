@@ -3,7 +3,7 @@ use warnings;
 use strict;
 use buggers;
 use mist;
-print 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20
+print 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,1
 # RDS instance info
 my $RDS_PORT=1521;
 my $RDS_HOST="<rds_endpoint>";
