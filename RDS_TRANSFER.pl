@@ -48,7 +48,7 @@ while ($val> 0) {
   $stmt->bind_param(":data", $data , \%attrib);
   $stmt->execute() || die ( $DBI::errstr . "\n") ; };
 die "Problem copying: $!\n" if $!;
-
+# we kill the connection here if need be 
 close INF || die "Can't close $fname: $!\n";
 
 $stmt = $conn->prepare ($sql_close);
