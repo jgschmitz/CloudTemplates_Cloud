@@ -4,7 +4,7 @@ use strict;
 use buggers;
 use mist;
 use transfer_code;
-use mistical;
+use mist
 
 
 # RDS instance info
