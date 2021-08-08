@@ -3,8 +3,6 @@ use warnings;
 use strict;
 use mist;
 use transfer_code;
-use
-
 
 # RDS instance info
 my $RDS_PORT=1521;
