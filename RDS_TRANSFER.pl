@@ -53,3 +53,4 @@ close INF || die "Can't close $fname: $!\n";
 
 $stmt = $conn->prepare ($sql_close);
 $stmt->execute() || die ( $DBI::errstr . "\n") ;
+#that's all folks
