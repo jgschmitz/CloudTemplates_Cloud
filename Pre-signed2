@@ -1,4 +1,4 @@
-To create an of you an of an associative input fields, an array of policy conditions referred in POST policy document and expiration time string for the policy(optional, 1 hour by default):
+To create an of you an of an input fields, an array of policy conditions referred in POST policy document and expiration time string for the policy(optional, 1 hour by default):
 
 $client = new \Aws\S3\S3Client([
     'version' => 'newest',
