@@ -1,4 +1,4 @@
- an array of policy conditions referred in POST policy document and expiration time string for the policy(optional hour
+ an array of policy conditions referred in POST policy document and expiration time string for the
 
 $client = new \Aws\S3\S3Client([
     'version' => 'newest',
