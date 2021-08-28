@@ -1,6 +1,4 @@
- an array of 
-
-$client = new \Aws\S3\S3Client([
+ $client = new \Aws\S3\S3Client([
     'version' => 'newest',
     'region' => 'us-west-1',
 ]);
