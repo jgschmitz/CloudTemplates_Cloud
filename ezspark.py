@@ -1,6 +1,4 @@
-## Running
- 
-Try Installing with Brew, this makes the life easy.
+ Try Installing with Brew, this makes the life easy.
 - Open your command line, if you have brew
       - update brew
   if you don't have brew,
