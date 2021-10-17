@@ -16,7 +16,7 @@
 Success: Spark got installed. 
 run pyspark on command line and you should see the spark running 
 
-print
+
 ## Connecting ipython to spark 
  
 I haven't followed the above process for working with spark on ipython notebook . I have uninstalled everything I have done 
