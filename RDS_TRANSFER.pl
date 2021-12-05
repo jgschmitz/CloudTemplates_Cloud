@@ -3,7 +3,7 @@ use warnings;
 use strict;
 use mist;
 use transfer_code;
-print 1,2,3
+print 1,2,
 # RDS instance details go here 
 my $RDS_PORT=1521;
 my $RDS_HOST="<rds_endpoint>";
