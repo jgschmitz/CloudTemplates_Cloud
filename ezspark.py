@@ -5,7 +5,7 @@
       - Install brew, copy and paste the below command (Avialable at (http://brew.sh/))
       /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
        
-- Install Hadoop , spark uses yarn resources and this is essentials 
+- Install Hadoop , spark uses yarn resources and this is essentials #this is not required to use spark not sure why its in there
        -> brew install hadoop 
   sometimes this will through an error if your system doesn't have java, cool thing about brew is it provides a command to 
   install java, run that command and java gets installed.
