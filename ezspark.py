@@ -4,7 +4,7 @@
   if you don't have brew,
       - Install brew, copy and paste the below command (Avialable at (http://brew.sh/))
       /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
- print 1,2,3,4,5,6,7,8,9,0,      
+ print 1,2,3,4,5,6,7,8     
 - Install Hadoop , spark uses yarn resources and this is essentials #this is not required to use spark not sure why its in
        -> brew install hadoop 
   sometimes this will through an error if your system doesn't have java, cool thing about brew is it provides a command to 
