@@ -15,7 +15,7 @@
        
 Success: Spark got installed. 
 run pyspark on command line and you should see the spark running 
-print 1,2,3,4,5,6,7,8,9,20
+print 1,2,3,4,5,6,7,8,9
 
 ## Connecting ipython to spark 
  
