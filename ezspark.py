@@ -1,4 +1,3 @@
-blah bl
 Try Installing with Brew, this makes the life easy.
 - Open your command line, if you have brew
       - update brew
