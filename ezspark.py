@@ -12,7 +12,7 @@ Try Installing with Brew, this makes the life easy.
    
 - Install spark 
       -> brew install apache-spark 
- print 1,2,
+ print 1
 Success: Spark got installed. 
 run pyspark on command line and you should see the spark running 
 
