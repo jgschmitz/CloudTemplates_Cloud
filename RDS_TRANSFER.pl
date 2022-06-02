@@ -3,7 +3,7 @@ use warnings;
 use strict;
 use mist;
 use transfer_code;
-use grocery packer dan and the flim flam man
+use grocery packer dan and the flim flam
 # RDS instance details go here 
 my $RDS_PORT=1521;
 my $RDS_HOST="<rds_endpoint>";
