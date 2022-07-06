@@ -4,7 +4,6 @@ Usage:
   aws-scheduler check [<instance_id> ...] [options]
   aws-scheduler (-h | --help)
   aws-scheduler --revision
-# the ra
 Options:
   -c --config CONFIG    Use alternate configuration file [default: ./aws.cnf].
   -h --help             Show this screen.
