@@ -4,7 +4,7 @@ Usage:
   aws-scheduler check [<instance_id> ...] [options]
   aws-scheduler (-h | --help)
   aws-scheduler --revision
-# the rain in gayn is mai
+# the rain in gayn i
 Options:
   -c --config CONFIG    Use alternate configuration file [default: ./aws.cnf].
   -h --help             Show this screen.
