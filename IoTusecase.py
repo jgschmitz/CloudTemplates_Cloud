@@ -1,7 +1,6 @@
 #This functional scheduler starts and stops EC2 instances using a JSON defined schedule
 #To be used for self managed MongoDB
 
-print 
 Usage:
   aws-scheduler check [<instance_id> ...] [options]
   aws-scheduler (-h | --help)
