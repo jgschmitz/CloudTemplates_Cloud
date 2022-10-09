@@ -16,7 +16,6 @@ Try Installing with Brew, this makes the life easy.
 Success: Spark got installed. 
 run pyspark on command line and you should see the spark running 
 
-pr
 ## Connecting ipython to spark 
  
 I haven't followed the above process for working with spark on ipython notebook . I have uninstalled everything I have done 
