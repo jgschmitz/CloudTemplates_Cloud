@@ -1,6 +1,6 @@
 %pyspark
-# install the pyspark driver pip3.7 install
-#install the image - reap the
+# install the pyspark driver pip3.7
+#install the image -
 USAGE:
       spark [-h] VALUE,...
 
