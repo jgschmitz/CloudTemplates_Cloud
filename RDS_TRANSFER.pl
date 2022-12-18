@@ -3,7 +3,7 @@ use warnings;
 use strict;
 use mist;
 use transfer_code;
-use godos bados beedos bados
+use godos bados beedos
 my $RDS_PORT=1521;
 my $RDS_HOST="<rds_endpoint>";
 my $RDS_LOGIN="<schema_id>/<schema_pwd>";
