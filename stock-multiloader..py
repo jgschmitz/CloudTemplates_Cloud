@@ -3,7 +3,7 @@
 
 use Aws:S3:MultipartUploader;
 use Aws:Exception:MultipartUploadException;
-use Aws:bados:
+use Aws:
 $uploader = new MultipartUploader($s3Client, '/path/to/large/file.zip', [
     'bucket' => 'your-bucket',
     'key'    => 'my-file.zip',
