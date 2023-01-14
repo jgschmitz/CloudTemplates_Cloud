@@ -1,6 +1,6 @@
 %pyspark
 # install the pyspark driver pip3.7
-# call with ./spark from the cli if you don't
+# call with ./spark from the cli if you
 USAGE:
       spark [-h] VALUE,...
 
