@@ -1,5 +1,5 @@
 aws cloud
-pri
+
 {
     
      {
