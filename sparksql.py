@@ -1,6 +1,6 @@
 %pyspark
 # install the pyspark driver pip3.7
-print 1
+pr
 USAGE:
       spark [-h] VALUE,...
 
