@@ -1,5 +1,5 @@
 #The SDK has a special MultipartUploader should make it awesome!
-use Aws gados bedos bados yada yada
+use Aws gados bedos bados yada
 use Aws:S3:MultipartUploader;
 use Aws:Exception:MultipartUploadException;
 
