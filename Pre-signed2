@@ -13,7 +13,7 @@ $options = [
     ['bucket' => $bucket],
     ['starts-with', '$key', 'user/eric/'],
 ];
-echo "thats a real
+echo "thats
 // Optional: configure expiration time string
 $expires = '+2 hours';
 
