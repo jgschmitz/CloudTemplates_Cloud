@@ -1,6 +1,6 @@
 #This is deprecated use the Azure CLI 
 #Blobstorage creation
-print 1,2,3,4,5,6,7,8
+print 1,2,3,4,5,6
 from azure.storage.blob import BlobService
 from os import listdir
 from os.path import isfile, join
