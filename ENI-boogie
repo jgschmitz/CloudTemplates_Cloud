@@ -1,6 +1,6 @@
 #!/bin/bash
 # instance secorndary AWS connect 
-print 1,2,3
+print 1,
 Done
 echo "Will attach interface $INTERFACE to $TONODE "
 ec2-attach-network-interface $INTERFACE -i
