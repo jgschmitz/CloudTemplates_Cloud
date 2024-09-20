@@ -1,45 +1,74 @@
-Try Installing with Brew, this makes the life easy.
-- Open your command line, if you have brew
-      - update brew
-  if you don't have brew,
-      - Install brew, copy and paste the below command (Avialable at (http://brew.sh/))
-      /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+#!/bin/bash
 
-- Install Hadoop , spark uses yarn resources and this is essentials #this is not required to use spark not sure why its in
-       -> brew install hadoop 
-  sometimes this will through an error if your system doesn't have java, cool thing about brew is it provides a command to 
-  install java, run that command and java gets installed.
-   
-- Install spark 
-      -> brew install apache-spark 
+# This script will help you install and set up Apache Spark using Brew.
 
-Success: Spark got installed. 
-run pyspark on command line and you should see the spark running 
+# Step 1: Check if Brew is installed
+if command -v brew >/dev/null 2>&1; then
+    echo "Brew is installed. Updating Brew..."
+    brew update
+else
+    echo "Brew is not installed. Installing Brew..."
+    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    echo "Brew installed successfully. Updating Brew..."
+    brew update
+fi
 
-## Connecting ipython to spark 
- 
-I haven't followed the above process for working with spark on ipython notebook . I have uninstalled everything I have done 
-before and worked on the following lines 
- 
-- Open the link (http://spark.apache.org/downloads.html) and download it in the folder you wish (in my case it is ~/Downloads)
-- Go to the command line and execute the following the statements 
-      *  tar xvzf spark-2.0.1-bin-hadoop2.7.tgz (unzip the downloaded folder )
-      *  mv spark-2.0.1-bin-hadoop2.7 spark2 (change the filename to spark2)
-      *  cd spark2/sbin (go to the sbin folder)
-      * ./start-master.sh (open the start-master.sh file. This will start the spark 
-      * cd ../logs
-      * ls (should show you a link)
-      * tail link(as given above)(this will show you that spark as started and give you web link to check the spark 
- 
-- In the command line 
-      * pip install findspark (More about it https://github.com/minrk/findspark)
-   
-- In the ipython notebook 
-     * import findspark 
-     * findspark.init("/Users/Satish/Downloads/spark2/")
-     * import pyspark 
-     * from pyspark.sql import DataFrameNaFunctions 
-     * from pyspark.sql.functions import lit 
-     * from pyspark.ml.feature import StringIndexer #label encoding
-     * from pyspark.ml import Pipeline
-     * sc = pyspark.SparkContext(appName="helloworld")
+# Step 2: Install Hadoop (Optional but sometimes needed for Spark's YARN resources)
+echo "Installing Hadoop..."
+brew install hadoop
+
+# Check if Java is installed
+if ! command -v java >/dev/null 2>&1; then
+    echo "Java is not installed. Installing Java..."
+    brew install java
+else
+    echo "Java is already installed."
+fi
+
+# Step 3: Install Apache Spark
+echo "Installing Apache Spark..."
+brew install apache-spark
+
+echo "Success: Apache Spark has been installed."
+echo "You can now run 'pyspark' from the command line to start Spark."
+
+# Optional: Steps for connecting Spark to IPython (Jupyter Notebook)
+
+# Step 4: Download Spark manually (if you prefer not to use Brew)
+echo "Downloading Spark manually from the official website..."
+cd ~/Downloads
+curl -O https://downloads.apache.org/spark/spark-2.0.1/spark-2.0.1-bin-hadoop2.7.tgz
+
+# Unzip the downloaded file and rename the folder
+tar xvzf spark-2.0.1-bin-hadoop2.7.tgz
+mv spark-2.0.1-bin-hadoop2.7 spark2
+
+# Step 5: Start Spark Master
+cd spark2/sbin
+./start-master.sh
+
+# Check if Spark started successfully
+cd ../logs
+logfile=$(ls | grep master)
+echo "Checking Spark master log..."
+tail -f $logfile
+
+# Step 6: Set up Spark in IPython (Jupyter Notebook)
+echo "Installing findspark..."
+pip install findspark
+
+echo "Setting up Spark in IPython..."
+cat <<EOF >setup_pyspark.py
+import findspark
+findspark.init("/Users/Satish/Downloads/spark2/")
+
+import pyspark
+from pyspark.sql import DataFrameNaFunctions
+from pyspark.sql.functions import lit
+from pyspark.ml.feature import StringIndexer
+from pyspark.ml import Pipeline
+
+sc = pyspark.SparkContext(appName="helloworld")
+EOF
+
+echo "Run the 'setup_pyspark.py' script inside your IPython notebook to initialize Spark."
