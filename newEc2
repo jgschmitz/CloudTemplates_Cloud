@@ -1,44 +1,55 @@
 #!/bin/bash
 
-# Authorize TCP, SSH & ICMP for default Security Group
-#ec2-authorize default -P icmp -t -1:-1 -s 0.0.0.0/0
-#ec2-authorize default -P tcp -p 22 -s 0.0.0.0/0
+# Author: [Your Name]
+# This script creates a new EC2 instance and assigns a static IP address.
 
-# The Static IP Address for this instance:
+# Retrieve the static IP address from a file
 IP_ADDRESS=$(cat ~/.ec2/ip_address)
 
-# Create new t1.micro instance using ami-cef405a7 (64 bit Ubuntu Server 10.10 Maverick Meerkat)
-# using the default security group and a 16GB EBS datastore as /dev/sda1.
-# EC2_INSTANCE_KEY is an environment variable containing the name of the instance key.
-# --block-device-mapping ...:false to leave the disk image around after terminating instance
-EC2_RUN_RESULT=$(ec2-run-instances --instance-type t1.micro --group default --region us-east-1 --key $EC2_INSTANCE_KEY --block-device-mapping "/dev/sda1=:16:true" --instance-initiated-shutdown-behavior stop --user-data-file instance_installs.sh ami-cef405a7)
+# Create a new t1.micro instance using ami-cef405a7 (64-bit Ubuntu Server 10.10 Maverick Meerkat)
+# - Default security group
+# - 16GB EBS as /dev/sda1
+# - The instance will stop on shutdown
+# - Run a custom user data script (instance_installs.sh)
+# EC2_INSTANCE_KEY should be an environment variable containing the name of the keypair
+EC2_RUN_RESULT=$(ec2-run-instances \
+  --instance-type t1.micro \
+  --group default \
+  --region us-east-1 \
+  --key $EC2_INSTANCE_KEY \
+  --block-device-mapping "/dev/sda1=:16:true" \
+  --instance-initiated-shutdown-behavior stop \
+  --user-data-file instance_installs.sh \
+  ami-cef405a7)
 
-INSTANCE_NAME=$(echo ${EC2_RUN_RESULT} | sed 's/RESERVATION.*INSTANCE //' | sed 's/ .*//')
+# Extract the instance ID from the EC2 run result
+INSTANCE_ID=$(echo "$EC2_RUN_RESULT" | grep 'INSTANCE' | awk '{print $2}')
 
-times=0
-echo
-while [ 5 -gt $times ] && ! ec2-describe-instances $INSTANCE_NAME | grep -q "running"
-do
-  times=$(( $times + 1 ))
-  echo Attempt $times at verifying $INSTANCE_NAME is running...
+# Verify the instance is running, with up to 5 attempts
+max_attempts=5
+attempts=0
+while [ $attempts -lt $max_attempts ]; do
+  echo "Attempt $((attempts + 1)) at verifying instance $INSTANCE_ID is running..."
+  if ec2-describe-instances $INSTANCE_ID | grep -q "running"; then
+    echo "Instance $INSTANCE_ID is running."
+    break
+  fi
+  attempts=$((attempts + 1))
+  sleep 5
 done
 
-echo
-
-if [ 5 -eq $times ]; then
-  echo Instance $INSTANCE_NAME is not running. Exiting...
-  exit
+# Check if the instance started successfully
+if [ $attempts -eq $max_attempts ]; then
+  echo "Instance $INSTANCE_ID failed to start after $max_attempts attempts. Exiting..."
+  exit 1
 fi
 
-ec2-associate-address $IP_ADDRESS -i $INSTANCE_NAME
+# Associate the static IP address with the instance
+ec2-associate-address $IP_ADDRESS -i $INSTANCE_ID
+echo "Instance $INSTANCE_ID has been created and assigned static IP address $IP_ADDRESS."
 
-echo
-echo Instance $INSTANCE_NAME has been created and assigned static IP Address $IP_ADDRESS
-echo
-
-# Since the server signature changes each time, remove the server's entry from ~/.ssh/known_hosts
-# Maybe you don't need to do this if you're using a Reserved Instance?
+# Remove the server's old entry from known_hosts (due to potential signature changes)
 ssh-keygen -R $IP_ADDRESS
 
-# SSH into my BRAND NEW EC2 INSTANCE! WooHoo!!!
-ssh -i $EC2_HOME/$EC2_INSTANCE_KEY.pem ubuntu@$IP_ADDRESS
+# SSH into the newly created EC2 instance
+ssh -i "$EC2_HOME/$EC2_INSTANCE_KEY.pem" ubuntu@$IP_ADDRESS
