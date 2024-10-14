@@ -1,71 +1,55 @@
-%pyspark
-# install the pyspark driver pip3.7
-
-USAGE:
-      spark [-h] VALUE,...
-
-    EXAMPLES:
-      spark 1 5 22 13 53
-      ▁▁▃▂█
-      spark 0,30,55,80,33,150
-      ▁▂▃▄▂█
-      echo 9 13 5 17 1 | spark
-      ▄▆▂█▁
-
 """
-Example of loading .parquet formatted files into a in-memory SQLContext table and running SQL queries against it.
-This script is configured to run a Spark job inside a Jupyter notebook and pull a parquet file from
-our Mapr Cluster
-
+Example of loading data from a MongoDB collection into an in-memory SQLContext table and running SQL queries against it.
+This script uses the MongoDB Spark Connector to pull data from MongoDB.
 """
+
+from pyspark.sql import SparkSession
+from pyspark.sql import SQLContext
 import sys
 
-LINE_LENGTH = 200
-def print_horizontal():
-    """
-    Simple method to print horizontal line
-    :return: None
-    """
-    for i in range(LINE_LENGTH):
-        sys.stdout.write('-')
-    print("")
-try:
-    from pyspark import SparkContext
-    from pyspark import SQLContext
+# Define constants
+LINE_LENGTH = 80
 
-    print ("Successfully imported Spark Modules -- `SparkContext, SQLContext`")
+# Function to print horizontal line
+def print_horizontal():
+    print('-' * LINE_LENGTH)
+
+# Initialize Spark session with MongoDB configuration
+try:
+    spark = SparkSession.builder \
+        .appName("MongoDB Integration") \
+        .config("spark.mongodb.input.uri", "mongodb://your_mongodb_uri/database.collection") \
+        .config("spark.mongodb.output.uri", "mongodb://your_mongodb_uri/database.collection") \
+        .getOrCreate()
+
+    sqlContext = SQLContext(spark)
+    print("Successfully connected to MongoDB via Spark")
     print_horizontal()
-except ImportError as e:
-    print ("Can not import Spark Modules", e)
+except Exception as e:
+    print(f"Error initializing Spark or MongoDB connection: {e}")
     sys.exit(1)
 
-sqlContext = SQLContext(sparkContext=sc)
+# Load data from MongoDB into a DataFrame
+mongo_df = spark.read.format("mongo").load()
 
-# gets parquet file located on cluster
-parquetFile = sqlContext.read.parquet("/mapr/maprcluster/data/WELL/114a54dc-a4c6-4ea4-8914-9aa518ad78f9.parquet/")
+# Register the DataFrame as a temporary SQL table
+mongo_df.createOrReplaceTempView("mongoData")
 
-# Stores the DataFrame into an "in-memory temporary table"
-parquetFile.registerTempTable("parquetFile")
+# Run SQL query on the MongoDB data
+all_data_sql = sqlContext.sql("SELECT * FROM mongoData")
 
-# Run standard SQL queries against temporary table
-wells_all_all_sql = sqlContext.sql("SELECT * FROM parquetFile")
-
-# Print the result set
-wells_all_all = wells_all_all_sql.map(lambda p: "UWI: {0:15} Comment: {1}".format(p.name, p.comment_col))
-
-print("All wells_all and Comments -- `SELECT * FROM parquetFile`")
+# Print results of the SQL query
+print("All data from MongoDB -- `SELECT * FROM mongoData`")
 print_horizontal()
-for wells in wells_all_all.collect():
-    print(wells)
+for row in all_data_sql.collect():
+    print(f"UWI: {row['name']:15} Comment: {row['comment_col']}")
 
-# Use standard SQL to filter
-wells_all_filtered_sql = sqlContext.sql("SELECT name FROM parquetFile WHERE name LIKE '%UWI%'")
+# Run a filtered SQL query to get specific rows
+filtered_data_sql = sqlContext.sql("SELECT name FROM mongoData WHERE name LIKE '%UWI%'")
 
-# Print the result set
-wells_all_filtered = wells_all_filtered_sql.map(lambda p: "UWI: {0:20}".format(p.name))
-
+# Print filtered results
 print_horizontal()
-print("wells Filtered -- `SELECT name FROM parquetFile WHERE name LIKE '%UWI%'`")
+print("Filtered Data -- `SELECT name FROM mongoData WHERE name LIKE '%UWI%'`")
 print_horizontal()
-for wells in wells_all_filtered.collect():
-    print(wells)
+for row in filtered_data_sql.collect():
+    print(f"UWI: {row['name']:20}")
