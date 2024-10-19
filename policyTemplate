@@ -1,16 +1,67 @@
-{
- "Statement": [
- {
- "Action": [
- "ec2:DescribeInstances",
- "ec2:CreateRoute",
- "ec2:ReplaceRoute",
- "ec2:StartInstances",
- "ec2:StopInstances"
- "ec2:GetInstances",
- ],
- "Effect": "Allow",
- "Resource": "*"
- }
- ]
- }
+# Configure the AWS provider
+provider "aws" {
+  region = "us-east-1"  # Specify the AWS region
+}
+
+# Define a variable for the AMI ID (you can set this dynamically)
+variable "ami_id" {
+  description = "AMI ID for the EC2 instance"
+  default     = "ami-0c55b159cbfafe1f0"  # Example Amazon Linux 2 AMI (adjust as needed)
+}
+
+# Define a variable for the instance type
+variable "instance_type" {
+  description = "EC2 instance type"
+  default     = "t2.micro"  # Example instance type
+}
+
+# Define a Security Group to allow SSH access
+resource "aws_security_group" "ec2_ssh" {
+  name        = "ec2_ssh_security_group"
+  description = "Allow SSH inbound traffic"
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]  # Allow SSH from anywhere (adjust for security)
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"  # Allow all outbound traffic
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "ec2-ssh-sg"
+  }
+}
+
+# Create an EC2 instance
+resource "aws_instance" "example" {
+  ami           = var.ami_id
+  instance_type = var.instance_type
+  key_name      = "my-key-pair"  # Replace with your key pair name
+
+  # Associate the security group created above
+  vpc_security_group_ids = [aws_security_group.ec2_ssh.id]
+
+  # Tag the instance
+  tags = {
+    Name = "example-ec2-instance"
+  }
+
+  # Optional: User data for cloud-init
+  user_data = <<-EOF
+              #!/bin/bash
+              echo "Hello, World!" > /var/www/html/index.html
+              EOF
+}
+
+# Output the instance's public IP address
+output "instance_public_ip" {
+  description = "The public IP address of the EC2 instance"
+  value       = aws_instance.example.public_ip
+}
